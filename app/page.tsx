@@ -1,12 +1,28 @@
+import { getTodos } from "@/api/todo-api";
+import TodoForm from "@/components/todos/TodoForm";
 import TodoList from "@/components/todos/TodoList";
-import Link from "next/link";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import React from "react";
 
-const RootPage = () => {
+const RootPage = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["todos"],
+    queryFn: getTodos,
+  });
+
   return (
-    <main>
-      <TodoList />
-    </main>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <main>
+        <TodoForm />
+        <TodoList />
+      </main>
+    </HydrationBoundary>
   );
 };
 

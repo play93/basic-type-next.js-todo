@@ -1,4 +1,10 @@
 import { getTodoDetail } from "@/api/todo-api";
+import TodoItem from "@/components/todos/TodoItem";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
 import React from "react";
 
@@ -14,12 +20,19 @@ interface TodoDetailPageProps {
 
 const TodoDetailPage = async ({ params }: TodoDetailPageProps) => {
   const id = params.id;
-  const { completed, text } = await getTodoDetail(id);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["todos", id],
+    queryFn: () => getTodoDetail(id),
+  });
 
   return (
-    <div>
-      TodoDetailPage {text} - {completed ? "완료됨" : "미완료"}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div>
+        <TodoItem id={id} />
+      </div>
+    </HydrationBoundary>
   );
 };
 

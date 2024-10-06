@@ -49,3 +49,24 @@ export const deleteTodo = async (id: string) => {
 
   return todo;
 };
+
+// todo 상태 변경하기 (완료/미완료)
+export const toggleTodo = async (id: string, completed: boolean) => {
+  const response = await fetch(`http://localhost:5000/todos/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ completed }),
+    // body에 뭔가 있다! body에 넣어준게 JSON을 문자열화 한거다! => headers에다가 json이라고 알려줘야함.(서버한테)
+    // 안그러면 서버는 그냥 문자열로써 이해하기 때문.
+  });
+
+  if (!response.ok) {
+    throw new Error("업데이트에 실패했습니다.");
+  }
+
+  const todo: Todo = await response.json();
+
+  return todo;
+};

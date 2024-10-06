@@ -1,32 +1,23 @@
 "use client";
 
-import { addTodo } from "@/api/todo-api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAddTodoMutation } from "@/query/useTodoMutation";
 import React from "react";
 
 const TodoForm = () => {
-  const queryClient = useQueryClient();
-
-  const { mutateAsync } = useMutation({
-    mutationFn: addTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["todos"],
-      });
-    },
-  });
+  const { mutateAsync: addTodo } = useAddTodoMutation();
 
   const onSubmitTodo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // e.currentTarget은 이벤트가 재할당되면서 null이 되지만 form은 그대로 있음.
+    const formData = new FormData(form);
     const title = formData.get("title")?.toString().trim();
 
     if (!title) return;
 
-    await mutateAsync(title);
+    await addTodo(title);
 
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   return (

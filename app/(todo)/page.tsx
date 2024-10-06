@@ -1,6 +1,7 @@
 import { getTodos } from "@/api/todo-api";
 import TodoForm from "@/components/todos/TodoForm";
 import TodoList from "@/components/todos/TodoList";
+import { Separator } from "@/components/ui/separator";
 import {
   dehydrate,
   HydrationBoundary,
@@ -23,10 +24,10 @@ const TodoPage = async () => {
           <h1 className="font-black text-4xl">TODO LIST</h1>
         </section>
 
-        <main>
-          <TodoForm />
-          <TodoList />
-        </main>
+        <Separator />
+
+        <TodoList />
+        <TodoForm />
       </div>
     </HydrationBoundary>
   );

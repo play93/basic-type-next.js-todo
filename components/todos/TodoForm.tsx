@@ -2,6 +2,8 @@
 
 import { useAddTodoMutation } from "@/query/useTodoMutation";
 import React from "react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const TodoForm = () => {
   const { mutateAsync: addTodo } = useAddTodoMutation();
@@ -21,9 +23,13 @@ const TodoForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmitTodo}>
-      <input type="text" name="title" placeholder="할 일을 입력하세요" />
-      <button type="submit">추가</button>
+    <form onSubmit={onSubmitTodo} className="flex flex-col gap-2">
+      <Input type="text" name="title" placeholder="할 일을 입력하세요" />
+      <div className="text-right">
+        <Button type="submit" className="w-fit">
+          추가
+        </Button>
+      </div>
     </form>
   );
 };

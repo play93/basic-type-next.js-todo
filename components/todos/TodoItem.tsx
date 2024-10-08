@@ -7,6 +7,7 @@ import {
 import { Todo } from "@/types/todo.types";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 
 interface TodoItemProps {
   todo: Todo;
@@ -20,19 +21,30 @@ const TodoItem = ({ todo }: TodoItemProps) => {
 
   return (
     <div className="flex flex-row justify-between items-center rounded-2xl bg-[#f5f5f5] p-4 hover:bg-[#ebebeb]">
-      <Link className="hover:underline" href={`/todo/${todo.id}`}>
-        {title}
-      </Link>
+      <div className="flex flex-row items-center gap-2">
+        <Checkbox
+          checked={completed}
+          onCheckedChange={(checked) =>
+            checked !== "indeterminate" &&
+            toggleTodo({ id, completed: checked })
+          } // checked가 알 수 없음 (결정되지 않음)이 아닐 때만 toggleTodo해줘라 라는 뜻
+        />
+
+        <Link className="hover:underline" href={`/todo/${todo.id}`}>
+          {title}
+        </Link>
+      </div>
+
       <div className=" flex flex-row gap-2">
         <Button variant="destructive" onClick={() => deleteTodo(id)}>
           삭제
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           onClick={() => toggleTodo({ id, completed: !completed })}
         >
           {completed ? "완료됨" : "미완료"}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

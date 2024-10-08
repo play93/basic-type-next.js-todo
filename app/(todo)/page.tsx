@@ -1,4 +1,5 @@
 import { getTodos } from "@/api/todo-api";
+import TodoController from "@/components/todos/TodoController";
 import TodoForm from "@/components/todos/TodoForm";
 import TodoList from "@/components/todos/TodoList";
 import { Separator } from "@/components/ui/separator";
@@ -9,12 +10,24 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 
+//서버사이드렌더링에 포함된 것들은 프리패치로 미리 가져와서 초기 로딩 없이 화면에 렌더링해줄 수 있음.
+
 const TodoPage = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["todos"],
-    queryFn: getTodos,
+    queryKey: ["todos", undefined],
+    queryFn: () => getTodos(),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["todos", "pending"],
+    queryFn: () => getTodos("pending"),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["todos", "completed"],
+    queryFn: () => getTodos("completed"),
   });
 
   return (
@@ -26,7 +39,11 @@ const TodoPage = async () => {
 
         <Separator />
 
-        <TodoList />
+        <div className="space-y-4">
+          <TodoController />
+          <TodoList />
+        </div>
+
         <TodoForm />
       </div>
     </HydrationBoundary>

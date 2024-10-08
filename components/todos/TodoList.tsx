@@ -1,10 +1,14 @@
 "use client";
 
+import { useTodoStore } from "@/store/useTodoStore";
 import TodoItem from "./TodoItem";
 import { useTodoQuery } from "@/query/useTodoQuery";
 
 const TodoList = () => {
-  const { data: todos, isLoading } = useTodoQuery();
+  const { completed } = useTodoStore();
+  const { data: todos, isLoading } = useTodoQuery(
+    completed ? "completed" : "pending"
+  );
 
   if (isLoading) return <div>Loading...</div>;
 

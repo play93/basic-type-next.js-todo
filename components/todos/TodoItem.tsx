@@ -30,7 +30,10 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           } // checked가 알 수 없음 (결정되지 않음)이 아닐 때만 toggleTodo해줘라 라는 뜻
         />
 
-        <Link className="hover:underline" href={`/todo/${todo.id}`}>
+        <Link
+          className="hover:underline dark:text-black"
+          href={`/todo/${todo.id}`}
+        >
           {title}
         </Link>
       </div>

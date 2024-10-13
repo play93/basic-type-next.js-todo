@@ -1,7 +1,9 @@
 import { Todo } from "@/types/todo.types";
 
+const BASE_URL = "http://localhost:3000";
+
 export const getTodos = async (filter?: "completed" | "pending") => {
-  const todoURL = new URL("todos", "http://localhost:5000");
+  const todoURL = new URL(BASE_URL);
 
   if (filter === "completed") todoURL.searchParams.set("completed", "true");
   if (filter === "pending") todoURL.searchParams.set("completed", "false");
@@ -17,7 +19,9 @@ export const getTodos = async (filter?: "completed" | "pending") => {
 
 // todo 가져오기
 export const getTodoDetail = async (id: string) => {
-  const response = await fetch(`http://localhost:5000/todos/${id}`, {
+  const todoDetailURL = new URL(`${BASE_URL}/${id}`);
+
+  const response = await fetch(todoDetailURL.toString(), {
     cache: "no-store",
   });
 
@@ -28,7 +32,9 @@ export const getTodoDetail = async (id: string) => {
 
 // todo 추가하기
 export const addTodo = async (title: string) => {
-  const response = await fetch("http://localhost:5000/todos", {
+  const todoURL = new URL(BASE_URL);
+
+  const response = await fetch(todoURL.toString(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +49,9 @@ export const addTodo = async (title: string) => {
 
 // todo 삭제하기
 export const deleteTodo = async (id: string) => {
-  const response = await fetch(`http://localhost:5000/todos/${id}`, {
+  const todoDetailURL = new URL(`${BASE_URL}/${id}`);
+
+  const response = await fetch(todoDetailURL.toString(), {
     method: "DELETE",
   });
 
@@ -58,7 +66,9 @@ export const deleteTodo = async (id: string) => {
 
 // todo 상태 변경하기 (완료/미완료)
 export const toggleTodo = async (id: string, completed: boolean) => {
-  const response = await fetch(`http://localhost:5000/todos/${id}`, {
+  const todoDetailURL = new URL(`${BASE_URL}/${id}`);
+
+  const response = await fetch(todoDetailURL.toString(), {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

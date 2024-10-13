@@ -1,5 +1,7 @@
 import { addTodo, deleteTodo, toggleTodo } from "@/api/todo-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 //todo 추가
 export const useAddTodoMutation = () => {
@@ -8,6 +10,7 @@ export const useAddTodoMutation = () => {
   return useMutation({
     mutationFn: addTodo,
     onSuccess: () => {
+      toast.success("할 일이 추가되었습니다.");
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });
@@ -22,6 +25,9 @@ export const useDeleteTodoMutation = () => {
   return useMutation({
     mutationFn: deleteTodo, // (id:string) => deleteTodo(id)
     onSuccess: () => {
+      toast("할 일이 삭제되었습니다.", {
+        icon: <Trash2 size={16} className="-mr-2" />,
+      });
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });
@@ -41,6 +47,7 @@ export const useToggleTodoMutation = () => {
     mutationFn: ({ id, completed }: ToggleTodoMutationParams) =>
       toggleTodo(id, completed),
     onSuccess: () => {
+      toast.info("할 일이 업데이트 되었습니다.");
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });

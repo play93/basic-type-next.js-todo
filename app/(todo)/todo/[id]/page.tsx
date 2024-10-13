@@ -1,5 +1,6 @@
 import { getTodoDetail } from "@/api/todo-api";
 import TodoItem from "@/components/todos/TodoItem";
+import { Button } from "@/components/ui/button";
 import { Todo } from "@/types/todo.types";
 import {
   dehydrate,
@@ -7,6 +8,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { Metadata } from "next";
+import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -32,7 +34,12 @@ const TodoDetailPage = async ({ params }: TodoDetailPageProps) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div>{todo ? <TodoItem todo={todo} /> : <div>Todo not found</div>}</div>
+      <div className="">
+        {todo ? <TodoItem todo={todo} /> : <div>Todo not found</div>}
+        <Link href={"/"}>
+          <Button className="w-full">돌아가기</Button>
+        </Link>
+      </div>
     </HydrationBoundary>
   );
 };
